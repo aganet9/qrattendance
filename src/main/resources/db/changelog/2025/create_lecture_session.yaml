@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_lecture_session
+      author: aganethed
+      changes:
+        - createTable:
+            tableName: lecture_session
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: subject
+                  type: VARCHAR(255)
+              - column:
+                  name: room
+                  type: VARCHAR(50)
+              - column:
+                  name: date
+                  type: TIMESTAMP
+              - column:
+                  name: teacher_id
+                  type: BIGINT
+        - addForeignKeyConstraint:
+            baseTableName: lecture_session
+            baseColumnNames: teacher_id
+            referencedTableName: teacher
+            referencedColumnNames: id
+            constraintName: fk_lecture_session_teacher

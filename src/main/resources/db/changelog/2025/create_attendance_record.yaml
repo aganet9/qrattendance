@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_attendance_record
+      author: aganethed
+      changes:
+        - createTable:
+            tableName: attendance_record
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: student_id
+                  type: BIGINT
+              - column:
+                  name: session_id
+                  type: BIGINT
+              - column:
+                  name: present
+                  type: BOOLEAN
+              - column:
+                  name: timestamp
+                  type: TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: attendance_record
+            baseColumnNames: student_id
+            referencedTableName: student
+            referencedColumnNames: id
+            constraintName: fk_attendance_record_student
+        - addForeignKeyConstraint:
+            baseTableName: attendance_record
+            baseColumnNames: session_id
+            referencedTableName: lecture_session
+            referencedColumnNames: id
+            constraintName: fk_attendance_record_lecture_session

@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_lecture_session_groups
+      author: aganethed
+      changes:
+        - createTable:
+            tableName: lecture_session_groups
+            columns:
+              - column:
+                  name: lecture_session_id
+                  type: BIGINT
+              - column:
+                  name: student_group_id
+                  type: BIGINT
+        - addForeignKeyConstraint:
+            baseTableName: lecture_session_groups
+            baseColumnNames: lecture_session_id
+            referencedTableName: lecture_session
+            referencedColumnNames: id
+            constraintName: fk_lecture_session_groups_lecture_session
+        - addForeignKeyConstraint:
+            baseTableName: lecture_session_groups
+            baseColumnNames: student_group_id
+            referencedTableName: student_group
+            referencedColumnNames: id
+            constraintName: fk_lecture_session_groups_student_group
