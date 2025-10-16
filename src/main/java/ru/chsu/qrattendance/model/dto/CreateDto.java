@@ -1,10 +1,13 @@
 package ru.chsu.qrattendance.model.dto;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class CreateDto {
-    public String subject;
-    public String room;
-    public String date;
-    public List<Long> groupIds;
+    private String subject;
+    private String room;
+    private String date;
+    private List<Long> groupIds;
 }

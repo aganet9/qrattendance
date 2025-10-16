@@ -1,5 +1,8 @@
 package ru.chsu.qrattendance.model.dto;
 
+import lombok.Data;
+
+@Data
 public class AttendDto {
-    public String token;
+    private String token;
 }

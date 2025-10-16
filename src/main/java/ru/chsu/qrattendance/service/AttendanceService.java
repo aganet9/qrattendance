@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.chsu.qrattendance.model.entity.AttendanceRecord;
 import ru.chsu.qrattendance.model.entity.LectureSession;
 import ru.chsu.qrattendance.model.entity.QRCodeToken;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@Validated
 public class AttendanceService {
 
     private final QRCodeTokenRepository qrCodeTokenRepository;

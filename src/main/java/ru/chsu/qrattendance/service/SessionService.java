@@ -2,9 +2,9 @@ package ru.chsu.qrattendance.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.chsu.qrattendance.model.dto.CreateSessionRequest;
 import ru.chsu.qrattendance.model.dto.CreateSessionResult;
 import ru.chsu.qrattendance.model.entity.*;
@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@Validated
 public class SessionService {
 
     private final LectureSessionRepository sessionRepository;

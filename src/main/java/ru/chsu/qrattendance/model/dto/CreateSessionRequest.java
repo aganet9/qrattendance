@@ -1,13 +1,11 @@
 package ru.chsu.qrattendance.model.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public final class CreateSessionRequest {
     private String subject;
     private String room;

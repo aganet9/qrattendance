@@ -22,8 +22,14 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/actuator/health"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/sessions/**").hasAuthority("ROLE_TEACHER")
                         .requestMatchers(HttpMethod.POST, "/api/attend/**").hasAuthority("ROLE_STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/api/sync/**" ).hasAnyAuthority("ROLE_STUDENT", "ROLE_TEACHER")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 ->
