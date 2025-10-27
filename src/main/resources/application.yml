@@ -22,7 +22,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8081/realms/UniversityAttendance
+          issuer-uri: ${keycloak.url:http://localhost:8081}/realms/UniversityAttendance
 
   data:
     redis:
@@ -34,7 +34,7 @@ app:
     ttl-seconds: 900
 
 springdoc:
-  api-docs:
-    path: /api-docs
   swagger-ui:
-    path: /swagger-ui.html
+    path: /swagger-ui
+  api-docs:
+    path: /v3/api-docs

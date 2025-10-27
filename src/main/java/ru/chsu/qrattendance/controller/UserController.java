@@ -52,8 +52,10 @@ public class UserController {
         Map<String, Object> realmAccess = jwt.getClaim("realm_access");
         if (realmAccess != null) {
             Object rolesObj = realmAccess.get("roles");
-            if (rolesObj instanceof List) {
-                return (List<String>) rolesObj;
+            if (rolesObj instanceof List<?>) {
+                return ((List<?>) rolesObj).stream()
+                        .map(Object::toString)
+                        .toList();
             }
         }
         return List.of();
