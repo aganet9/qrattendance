@@ -5,13 +5,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import ru.chsu.qrattendance.model.dto.CreateSessionRequest;
+import ru.chsu.qrattendance.model.dto.CreateDto;
 import ru.chsu.qrattendance.model.dto.CreateSessionResult;
 import ru.chsu.qrattendance.model.entity.*;
 import ru.chsu.qrattendance.repository.*;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -43,7 +43,7 @@ public class SessionService {
     }
 
     @Transactional
-    public CreateSessionResult createSession(CreateSessionRequest createSessionRequest, String teacherEmail,
+    public CreateSessionResult createSession(CreateDto createSessionRequest, String teacherEmail,
                                              String firstName,
                                              String lastName) {
         // найти/создать преподавателя
@@ -56,14 +56,14 @@ public class SessionService {
         });
 
         // найти группы студентов
-        List<StudentGroup> groups = groupRepository.findAllById(createSessionRequest.getGroupIds() == null ?
-                Collections.emptyList() : createSessionRequest.getGroupIds());
+        List<StudentGroup> groups = groupRepository.findAllByNameIn(createSessionRequest.getGroupNames() == null ?
+                Collections.emptyList() : createSessionRequest.getGroupNames());
 
         // создать и сохранить лекцию
         LectureSession lectureSession = new LectureSession();
         lectureSession.setSubject(createSessionRequest.getSubject());
         lectureSession.setRoom(createSessionRequest.getRoom());
-        lectureSession.setDate(createSessionRequest.getDate() == null ? LocalDateTime.now() : createSessionRequest.getDate());
+        lectureSession.setDate(createSessionRequest.getDate() == null ? LocalDate.now() : createSessionRequest.getDate());
         lectureSession.setTeacher(teacher);
         lectureSession.setStudentGroups(groups);
         lectureSession = sessionRepository.save(lectureSession);

@@ -19,7 +19,7 @@ databaseChangeLog:
                   type: VARCHAR(50)
               - column:
                   name: date
-                  type: TIMESTAMP
+                  type: DATE
               - column:
                   name: teacher_id
                   type: BIGINT

@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Getter
@@ -33,7 +33,7 @@ public class AttendanceRecord {
     private boolean present;
 
     @Column(name = "timestamp")
-    private LocalDateTime timestamp;
+    private LocalDate timestamp;
 
     @Override
     public final boolean equals(Object o) {

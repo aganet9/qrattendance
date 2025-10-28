@@ -10,11 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.chsu.qrattendance.model.dto.CreateDto;
-import ru.chsu.qrattendance.model.dto.CreateSessionRequest;
 import ru.chsu.qrattendance.model.dto.CreateSessionResult;
 import ru.chsu.qrattendance.service.SessionService;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -27,18 +25,11 @@ public class SessionController {
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> create(@RequestBody CreateDto dto,
-                                    @AuthenticationPrincipal Jwt jwt) {
+                                                      @AuthenticationPrincipal Jwt jwt) {
         String teacherEmail = jwt.getClaimAsString("email");
         String firstName = jwt.getClaimAsString("given_name");
         String lastName = jwt.getClaimAsString("family_name");
-        CreateSessionRequest req = new CreateSessionRequest();
-        req.setSubject(dto.getSubject());
-        req.setRoom(dto.getRoom());
-        if (dto.getDate() != null) {
-            req.setDate(LocalDateTime.parse(dto.getDate()));
-        }
-        req.setGroupIds(dto.getGroupIds());
-        CreateSessionResult res = sessionService.createSession(req, teacherEmail, firstName, lastName);
+        CreateSessionResult res = sessionService.createSession(dto, teacherEmail, firstName, lastName);
         return ResponseEntity.ok(Map.of("sessionId", res.lectureSession().getId(), "tokens", res.tokens()));
     }
 }

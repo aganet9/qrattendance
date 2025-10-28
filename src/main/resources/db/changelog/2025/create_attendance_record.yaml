@@ -22,7 +22,7 @@ databaseChangeLog:
                   type: BOOLEAN
               - column:
                   name: timestamp
-                  type: TIMESTAMP
+                  type: DATE
         - addForeignKeyConstraint:
             baseTableName: attendance_record
             baseColumnNames: student_id

@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +30,7 @@ public class LectureSession {
     private String room;
 
     @Column(name = "date")
-    private LocalDateTime date;
+    private LocalDate date;
 
     @ManyToOne
     private Teacher teacher;

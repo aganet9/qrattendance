@@ -5,7 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import ru.chsu.qrattendance.exception.*;
+import ru.chsu.qrattendance.exception.AttendanceException;
 import ru.chsu.qrattendance.model.entity.AttendanceRecord;
 import ru.chsu.qrattendance.model.entity.LectureSession;
 import ru.chsu.qrattendance.model.entity.QRCodeToken;
@@ -16,7 +16,7 @@ import ru.chsu.qrattendance.repository.QRCodeTokenRepository;
 import ru.chsu.qrattendance.repository.StudentRepository;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -101,7 +101,7 @@ public class AttendanceService {
         attendanceRecord.setStudent(student);
         attendanceRecord.setLectureSession(lectureSession);
         attendanceRecord.setPresent(true);
-        attendanceRecord.setTimestamp(LocalDateTime.now());
+        attendanceRecord.setTimestamp(LocalDate.now());
         attendanceRecordRepository.save(attendanceRecord);
 
         // пометка токена как использованного
