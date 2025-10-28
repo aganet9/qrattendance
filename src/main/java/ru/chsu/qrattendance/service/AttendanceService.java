@@ -8,35 +8,29 @@ import org.springframework.validation.annotation.Validated;
 import ru.chsu.qrattendance.exception.AttendanceException;
 import ru.chsu.qrattendance.model.entity.AttendanceRecord;
 import ru.chsu.qrattendance.model.entity.LectureSession;
-import ru.chsu.qrattendance.model.entity.QRCodeToken;
 import ru.chsu.qrattendance.model.entity.Student;
 import ru.chsu.qrattendance.repository.AttendanceRecordRepository;
 import ru.chsu.qrattendance.repository.LectureSessionRepository;
-import ru.chsu.qrattendance.repository.QRCodeTokenRepository;
 import ru.chsu.qrattendance.repository.StudentRepository;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Service
 @Validated
 public class AttendanceService {
 
-    private final QRCodeTokenRepository qrCodeTokenRepository;
     private final StudentRepository studentRepository;
     private final AttendanceRecordRepository attendanceRecordRepository;
     private final LectureSessionRepository lectureSessionRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final long tokenTtlSeconds;
 
-    public AttendanceService(QRCodeTokenRepository qrCodeTokenRepository,
-                             StudentRepository studentRepository,
+    public AttendanceService(StudentRepository studentRepository,
                              AttendanceRecordRepository attendanceRecordRepository,
                              LectureSessionRepository lectureSessionRepository,
                              RedisTemplate<String, Object> redisTemplate,
                              @Value("${app.token.ttl-seconds:900}") long tokenTtlSeconds) {
-        this.qrCodeTokenRepository = qrCodeTokenRepository;
         this.studentRepository = studentRepository;
         this.attendanceRecordRepository = attendanceRecordRepository;
         this.lectureSessionRepository = lectureSessionRepository;
@@ -104,12 +98,6 @@ public class AttendanceService {
         attendanceRecord.setTimestamp(LocalDate.now());
         attendanceRecordRepository.save(attendanceRecord);
 
-        // пометка токена как использованного
-        Optional<QRCodeToken> tokenEntity = qrCodeTokenRepository.findByToken(token);
-        tokenEntity.ifPresent(t -> {
-            t.setUsed(true);
-            qrCodeTokenRepository.save(t);
-        });
         return true;
     }
 }

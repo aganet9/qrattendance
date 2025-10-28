@@ -7,8 +7,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ru.chsu.qrattendance.model.dto.CreateDto;
 import ru.chsu.qrattendance.model.dto.CreateSessionResult;
-import ru.chsu.qrattendance.model.entity.*;
-import ru.chsu.qrattendance.repository.*;
+import ru.chsu.qrattendance.model.entity.LectureSession;
+import ru.chsu.qrattendance.model.entity.Student;
+import ru.chsu.qrattendance.model.entity.StudentGroup;
+import ru.chsu.qrattendance.model.entity.Teacher;
+import ru.chsu.qrattendance.repository.LectureSessionRepository;
+import ru.chsu.qrattendance.repository.StudentGroupRepository;
+import ru.chsu.qrattendance.repository.StudentRepository;
+import ru.chsu.qrattendance.repository.TeacherRepository;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -22,7 +28,6 @@ public class SessionService {
     private final StudentGroupRepository groupRepository;
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
-    private final QRCodeTokenRepository tokenRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final long tokenTtlSeconds;
 
@@ -30,14 +35,12 @@ public class SessionService {
                           StudentGroupRepository groupRepository,
                           StudentRepository studentRepository,
                           TeacherRepository teacherRepository,
-                          QRCodeTokenRepository tokenRepository,
                           RedisTemplate<String, Object> redisTemplate,
                           @Value("${app.token.ttl-seconds:900}") long tokenTtlSeconds) {
         this.sessionRepository = sessionRepository;
         this.groupRepository = groupRepository;
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
-        this.tokenRepository = tokenRepository;
         this.redisTemplate = redisTemplate;
         this.tokenTtlSeconds = tokenTtlSeconds;
     }
@@ -82,12 +85,6 @@ public class SessionService {
         List<String> tokens = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             String token = UUID.randomUUID().toString();
-            QRCodeToken qrCodeToken = new QRCodeToken();
-            qrCodeToken.setToken(token);
-            qrCodeToken.setUsed(false);
-            qrCodeToken.setSession(lectureSession);
-            tokenRepository.save(qrCodeToken);
-
             // сохранение токена в redis
             String key = "qr:token:" + token;
             redisTemplate.opsForValue().set(key, lectureSession.getId(), Duration.ofSeconds(tokenTtlSeconds));

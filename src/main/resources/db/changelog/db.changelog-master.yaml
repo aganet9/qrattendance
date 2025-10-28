@@ -10,6 +10,4 @@ databaseChangeLog:
   - include:
       file: db/changelog/2025/create_lecture_session_groups.yaml
   - include:
-      file: db/changelog/2025/create_qr_code_token.yaml
-  - include:
       file: db/changelog/2025/create_attendance_record.yaml
