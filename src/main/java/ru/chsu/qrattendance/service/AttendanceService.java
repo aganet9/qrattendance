@@ -41,6 +41,7 @@ public class AttendanceService {
     @Transactional
     public boolean markAttendance(String token, String studentEmail) {
         // проверка токена, чтобы несколько студентов не отметились одним
+        //test
         String usedKey = "qr:used:" + token;
 
         Boolean reserved = redisTemplate.opsForValue().setIfAbsent(usedKey, studentEmail);
