@@ -22,7 +22,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${keycloak.url:http://localhost:8081}/realms/UniversityAttendance
+          issuer-uri: ${keycloak.url:http://192.168.0.102:8081}/realms/UniversityAttendance
 
   data:
     redis:

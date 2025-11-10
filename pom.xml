@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ru.chsu</groupId>
 	<artifactId>qrattendance</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<name>QR Attendance</name>
 	<description>University QR Attendance</description>
 	<url/>

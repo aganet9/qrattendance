@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import ru.chsu.qrattendance.exception.AttendanceException;
 import ru.chsu.qrattendance.model.dto.CreateDto;
 import ru.chsu.qrattendance.model.dto.CreateSessionResult;
 import ru.chsu.qrattendance.model.entity.LectureSession;
@@ -91,5 +92,31 @@ public class SessionService {
             tokens.add(token);
         }
         return new CreateSessionResult(lectureSession, tokens);
+    }
+
+    public Map<String, Boolean> isUsed(String token) {
+        Boolean exists = redisTemplate.hasKey("qr:used:" + token);
+        return Map.of("used", Boolean.TRUE.equals(exists));
+    }
+
+    public void terminateSession(Long sessionId, String teacherEmail) {
+        // Проверяем права доступа
+        LectureSession session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new IllegalArgumentException("Сессия не найдена"));
+
+        if (!session.getTeacher().getEmail().equals(teacherEmail)) {
+            throw new AttendanceException("Сессия не принадлежит текущему пользователю");
+        }
+
+        // Очистка токенов из Redis
+        Set<String> keys = redisTemplate.keys("qr:token:*");
+        if (keys != null) {
+            for (String key : keys) {
+                Object sessionIdObj = redisTemplate.opsForValue().get(key);
+                if (sessionIdObj != null && sessionIdObj.toString().equals(sessionId.toString())) {
+                    redisTemplate.delete(key);
+                }
+            }
+        }
     }
 }

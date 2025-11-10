@@ -32,7 +32,9 @@ public class SecurityConfig {
                                 "/actuator/health"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/sessions/**").hasAuthority("ROLE_TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/sessions/used/**").hasAuthority("ROLE_TEACHER")
                         .requestMatchers(HttpMethod.POST, "/api/attend/**").hasAuthority("ROLE_STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/api/groups/**").hasAuthority("ROLE_TEACHER")
                         .requestMatchers(HttpMethod.POST, "/api/sync/**" ).hasAnyAuthority("ROLE_STUDENT", "ROLE_TEACHER")
                         .anyRequest().authenticated()
                 )

@@ -1,12 +1,12 @@
 package ru.chsu.qrattendance.model.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 @Data
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TeacherInfo {
     private String givenName;
     private String familyName;
