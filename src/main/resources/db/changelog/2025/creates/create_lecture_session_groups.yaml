@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_lecture_session_groups
+      author: aganethed
+      changes:
+        - createTable:
+            tableName: lecture_session_groups
+            columns:
+              - column:
+                  name: lecture_session_id
+                  remarks: "Сессия (fk_lecture_session_groups_lecture_session)"
+                  type: BIGINT
+              - column:
+                  name: student_group_id
+                  remarks: "Группа (fk_lecture_session_groups_student_group)"
+                  type: BIGINT

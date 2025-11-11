@@ -1,22 +1,18 @@
 databaseChangeLog:
   - changeSet:
-      id: create_teacher
+      id: create_student_group
       author: aganethed
       changes:
         - createTable:
-            tableName: teacher
+            tableName: student_group
             columns:
               - column:
                   name: id
+                  remarks: "Первичный ключ"
                   type: BIGSERIAL
                   constraints:
                     primaryKey: true
               - column:
-                  name: first_name
+                  name: name
+                  remarks: "Название группы"
                   type: VARCHAR(100)
-              - column:
-                  name: last_name
-                  type: VARCHAR(100)
-              - column:
-                  name: email
-                  type: VARCHAR(255)

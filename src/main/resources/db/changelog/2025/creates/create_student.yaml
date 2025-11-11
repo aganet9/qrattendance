@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_student
+      author: aganethed
+      changes:
+        - createTable:
+            tableName: student
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  remarks: "Первичный ключ"
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: first_name
+                  remarks: "Имя"
+                  type: VARCHAR(100)
+              - column:
+                  name: last_name
+                  remarks: "Фамилия"
+                  type: VARCHAR(100)
+              - column:
+                  name: email
+                  remarks: "Почта"
+                  type: VARCHAR(255)
+              - column:
+                  name: group_id
+                  remarks: "Группа (fk_student_student_group)"
+                  type: BIGINT

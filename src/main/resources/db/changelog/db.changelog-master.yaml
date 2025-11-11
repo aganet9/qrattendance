@@ -1,13 +1,5 @@
 databaseChangeLog:
-  - include:
-      file: db/changelog/2025/create_teacher.yaml
-  - include:
-      file: db/changelog/2025/create_student_group.yaml
-  - include:
-      file: db/changelog/2025/create_student.yaml
-  - include:
-      file: db/changelog/2025/create_lecture_session.yaml
-  - include:
-      file: db/changelog/2025/create_lecture_session_groups.yaml
-  - include:
-      file: db/changelog/2025/create_attendance_record.yaml
+  - includeAll:
+      path: db/changelog/2025/creates
+  - includeAll:
+      path: db/changelog/2025/constraints

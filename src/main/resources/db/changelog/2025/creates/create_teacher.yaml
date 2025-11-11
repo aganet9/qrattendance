@@ -1,31 +1,27 @@
 databaseChangeLog:
   - changeSet:
-      id: create_student
+      id: create_teacher
       author: aganethed
       changes:
         - createTable:
-            tableName: student
+            tableName: teacher
+            remarks: "Преподаватели"
             columns:
               - column:
                   name: id
                   type: BIGSERIAL
+                  remarks: "Первичный ключ"
                   constraints:
                     primaryKey: true
               - column:
                   name: first_name
+                  remarks: "Имя"
                   type: VARCHAR(100)
               - column:
                   name: last_name
+                  remarks: "Фамилия"
                   type: VARCHAR(100)
               - column:
                   name: email
+                  remarks: "Почта"
                   type: VARCHAR(255)
-              - column:
-                  name: group_id
-                  type: BIGINT
-        - addForeignKeyConstraint:
-            baseTableName: student
-            baseColumnNames: group_id
-            referencedTableName: student_group
-            referencedColumnNames: id
-            constraintName: fk_student_student_group
