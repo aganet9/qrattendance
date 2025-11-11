@@ -5,6 +5,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: lecture_session_groups
+            remarks: "Связь для таблиц Сессии и Группы (ManyToMany)"
             columns:
               - column:
                   name: lecture_session_id

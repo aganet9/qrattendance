@@ -5,6 +5,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: lecture_session
+            remarks: "Сессии"
             columns:
               - column:
                   name: id

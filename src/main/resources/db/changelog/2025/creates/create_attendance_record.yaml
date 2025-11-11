@@ -5,6 +5,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: attendance_record
+            remarks: "Отметки"
             columns:
               - column:
                   name: id

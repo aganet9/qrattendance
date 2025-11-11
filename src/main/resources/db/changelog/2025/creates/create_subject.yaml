@@ -1,19 +1,19 @@
 databaseChangeLog:
   - changeSet:
-      id: create_student_group
+      id: create_subject
       author: aganethed
       changes:
         - createTable:
-            tableName: student_group
-            remarks: "Группы"
+            tableName: subject
+            remarks: "Предметы"
             columns:
               - column:
                   name: id
-                  remarks: "Первичный ключ"
                   type: BIGSERIAL
+                  remarks: "Первичный ключ"
                   constraints:
                     primaryKey: true
               - column:
                   name: name
-                  remarks: "Название группы"
+                  remarks: "Название предмета"
                   type: VARCHAR(100)

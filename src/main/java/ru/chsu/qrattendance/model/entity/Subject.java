@@ -15,25 +15,21 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "teacher")
-public class Teacher {
-
+@Table(name = "subject")
+public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(unique = true)
-    private String email;
-
-    @ManyToMany(mappedBy = "teachers")
+    @ManyToMany
+    @JoinTable(name = "teacher_subject",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id"))
     @ToString.Exclude
-    private List<Subject> subjects;
+    private List<Teacher> teachers;
 
     @Override
     public final boolean equals(Object o) {
@@ -46,8 +42,8 @@ public class Teacher {
                 ? proxy.getHibernateLazyInitializer().getPersistentClass()
                 : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        if (!(o instanceof Teacher teacher)) return false;
-        return getId() != null && Objects.equals(getId(), teacher.getId());
+        if (!(o instanceof Subject subject)) return false;
+        return getId() != null && Objects.equals(getId(), subject.getId());
     }
 
     @Override

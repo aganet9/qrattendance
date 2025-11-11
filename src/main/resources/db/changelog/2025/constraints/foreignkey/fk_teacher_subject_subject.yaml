@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk_teacher_subject_subject
+      author: aganethed
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: teacher_subject
+            baseColumnNames: subject_id
+            referencedTableName: subject
+            referencedColumnNames: id
+            constraintName: fk_teacher_subject_subject

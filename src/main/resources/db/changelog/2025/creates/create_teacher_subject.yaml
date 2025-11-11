@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_teacher_subject
+      author: aganethed
+      changes:
+        - createTable:
+            tableName: teacher_subject
+            remarks: "Связь для таблиц Преподаватели и Предметы"
+            columns:
+              - column:
+                  name: teacher_id
+                  type: BIGINT
+                  remarks: "Преподаватель (fk_teacher_subject_teacher)"
+              - column:
+                  name: subject_id
+                  type: BIGINT
+                  remarks: "Предметы (fk_teacher_subject_subject)"
