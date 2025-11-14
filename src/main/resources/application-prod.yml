@@ -25,7 +25,7 @@ security:
   oauth2:
     resourceserver:
       jwt:
-        issuer-uri: ${KEYCLOAK_URL}/realms/UniversityAttendance
+        issuer-uri: ${KEYCLOAK_URL:https://keycloak-production-cdf5.up.railway.app}/realms/UniversityAttendance
 
 app:
   token:
