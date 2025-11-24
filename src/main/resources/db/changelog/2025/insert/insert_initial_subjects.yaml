@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_initial_subjects
+      author: aganethed
+      changes:
+        - insert:
+            tableName: subject
+            columns:
+              - column:
+                  name: name
+                  value: "Мобильное программирование"
+        - insert:
+            tableName: subject
+            columns:
+              - column:
+                  name: name
+                  value: "Проектирование баз данных"
+        - insert:
+            tableName: subject
+            columns:
+              - column:
+                  name: name
+                  value: "Правоведение"
+        - insert:
+            tableName: subject
+            columns:
+              - column:
+                  name: name
+                  value: "Экономика"
+        - insert:
+            tableName: subject
+            columns:
+              - column:
+                  name: name
+                  value: "Разработка и анализ требований"
+        - insert:
+            tableName: subject
+            columns:
+              - column:
+                  name: name
+                  value: "Искусственные нейронные сети"
+        - insert:
+            tableName: subject
+            columns:
+              - column:
+                  name: name
+                  value: "С#-программирование"
+        - insert:
+            tableName: subject
+            columns:
+              - column:
+                  name: name
+                  value: "Физическая культура и спорт (элективная дисциплина)"

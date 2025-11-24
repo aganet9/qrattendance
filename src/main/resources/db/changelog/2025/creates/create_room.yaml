@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_room
+      author: aganethed
+      changes:
+        - createTable:
+            tableName: room
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                  remarks: "Первичный ключ"
+              - column:
+                  name: name
+                  type: varchar(10)
+                  remarks: "Номер аудитории"

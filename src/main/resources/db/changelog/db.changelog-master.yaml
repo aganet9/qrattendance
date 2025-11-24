@@ -3,3 +3,5 @@ databaseChangeLog:
       path: db/changelog/2025/creates
   - includeAll:
       path: db/changelog/2025/constraints
+  - includeAll:
+      path: db/changelog/2025/insert

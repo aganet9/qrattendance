@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_initial_rooms
+      author: aganethed
+      changes:
+        - insert:
+            tableName: room
+            columns:
+              - column:
+                  name: name
+                  value: "201"
+        - insert:
+            tableName: room
+            columns:
+              - column:
+                  name: name
+                  value: "202"
+        - insert:
+            tableName: room
+            columns:
+              - column:
+                  name: name
+                  value: "203"
+        - insert:
+            tableName: room
+            columns:
+              - column:
+                  name: name
+                  value: "204"
+        - insert:
+            tableName: room
+            columns:
+              - column:
+                  name: name
+                  value: "205"
+        - insert:
+            tableName: room
+            columns:
+              - column:
+                  name: name
+                  value: "221"
+        - insert:
+            tableName: room
+            columns:
+              - column:
+                  name: name
+                  value: "217"
+        - insert:
+            tableName: room
+            columns:
+              - column:
+                  name: name
+                  value: "218a"
+        - insert:
+            tableName: room
+            columns:
+              - column:
+                  name: name
+                  value: "218"
+        - insert:
+            tableName: room
+            columns:
+              - column:
+                  name: name
+                  value: "227"
+        - insert:
+            tableName: room
+            columns:
+              - column:
+                  name: name
+                  value: "228"

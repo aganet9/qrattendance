@@ -7,8 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -16,18 +14,14 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "subject")
-public class Subject {
+@Table(name = "room")
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
     private String name;
-
-    @ManyToMany(mappedBy = "subjects")
-    @ToString.Exclude
-    private List<Teacher> teachers = new ArrayList<>();
 
     @Override
     public final boolean equals(Object o) {
@@ -40,8 +34,8 @@ public class Subject {
                 ? proxy.getHibernateLazyInitializer().getPersistentClass()
                 : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        if (!(o instanceof Subject subject)) return false;
-        return getId() != null && Objects.equals(getId(), subject.getId());
+        if (!(o instanceof Room room)) return false;
+        return getId() != null && Objects.equals(getId(), room.getId());
     }
 
     @Override

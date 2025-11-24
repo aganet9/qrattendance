@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,9 +32,14 @@ public class Teacher {
     @Column(unique = true)
     private String email;
 
-    @ManyToMany(mappedBy = "teachers")
+    @ManyToMany
+    @JoinTable(
+            name = "teacher_subject",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
     @ToString.Exclude
-    private List<Subject> subjects;
+    private List<Subject> subjects = new ArrayList<>();
 
     @Override
     public final boolean equals(Object o) {
