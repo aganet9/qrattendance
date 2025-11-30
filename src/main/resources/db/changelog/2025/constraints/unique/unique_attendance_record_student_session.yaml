@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: unique_attendance_record_student_session
+      author: aganethed
+      changes:
+        - addUniqueConstraint:
+            tableName: attendance_record
+            columnNames: student_id, session_id
+            constraintName: uq_attendance_student_session

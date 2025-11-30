@@ -2,6 +2,8 @@ databaseChangeLog:
   - includeAll:
       path: db/changelog/2025/creates
   - includeAll:
-      path: db/changelog/2025/constraints
+      path: db/changelog/2025/constraints/foreignkey
+  - includeAll:
+      path: db/changelog/2025/constraints/unique
   - includeAll:
       path: db/changelog/2025/insert

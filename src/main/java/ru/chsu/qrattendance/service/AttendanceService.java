@@ -1,6 +1,7 @@
 package ru.chsu.qrattendance.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,64 +41,68 @@ public class AttendanceService {
 
     @Transactional
     public boolean markAttendance(String token, String studentEmail) {
-        // проверка токена, чтобы несколько студентов не отметились одним
-        String usedKey = "qr:used:" + token;
+        // Резервируем токен на время обработки, чтобы параллельно им не воспользовались
+        String processingKey = "qr:processing:" + token;
 
-        Boolean reserved = redisTemplate.opsForValue().setIfAbsent(usedKey, studentEmail);
+        Boolean reserved = redisTemplate.opsForValue().setIfAbsent(processingKey, studentEmail);
         if (!Boolean.TRUE.equals(reserved)) {
             throw new AttendanceException("QR-код уже был использован");
         }
-        redisTemplate.expire(usedKey, Duration.ofSeconds(tokenTtlSeconds));
+        redisTemplate.expire(processingKey, Duration.ofSeconds(tokenTtlSeconds));
 
-        // проверка существования токена в redis
-        String tokenKey = "qr:token:" + token;
-        Object sessionIdObj = redisTemplate.opsForValue().get(tokenKey);
-        if (sessionIdObj == null) {
-            redisTemplate.delete(usedKey);
-            throw new AttendanceException("Некорректный QR-код");
+        try {
+            // проверка существования токена в redis
+            String tokenKey = "qr:token:" + token;
+            Object sessionIdObj = redisTemplate.opsForValue().get(tokenKey);
+            if (sessionIdObj == null) {
+                throw new AttendanceException("Некорректный QR-код");
+            }
+            Long sessionId = Long.valueOf(sessionIdObj.toString());
+
+            // есть ли студент
+            Student student = studentRepository.findByEmail(studentEmail).orElse(null);
+            if (student == null) {
+                throw new AttendanceException("Вас нет в списке студентов");
+            }
+
+            // есть ли лекция
+            LectureSession lectureSession = lectureSessionRepository.findById(sessionId).orElse(null);
+            if (lectureSession == null) {
+                throw new AttendanceException("Некорректное создание пары");
+            }
+
+            // из этих ли групп студент
+            boolean belongs = lectureSession.getStudentGroups().stream()
+                    .anyMatch(g -> g.getId().equals(student.getGroup().getId()));
+            if (!belongs) {
+                throw new AttendanceException("Вы не из этой группы");
+            }
+
+            // защита от дублей на уровне приложения + на всякий случай ловим уникальность БД
+            if (attendanceRecordRepository.existsByStudent_IdAndLectureSession_Id(student.getId(), lectureSession.getId())) {
+                throw new AttendanceException("Вы уже отмечались");
+            }
+
+            // запись посещения
+            AttendanceRecord attendanceRecord = new AttendanceRecord();
+            attendanceRecord.setStudent(student);
+            attendanceRecord.setLectureSession(lectureSession);
+            attendanceRecord.setPresent(true);
+            attendanceRecord.setTimestamp(LocalDate.now());
+            try {
+                attendanceRecordRepository.save(attendanceRecord);
+            } catch (DataIntegrityViolationException ex) {
+                throw new AttendanceException("Вы уже отмечались");
+            }
+
+            // Помечаем QR как действительно использованный
+            String usedKey = "qr:used:" + token;
+            redisTemplate.opsForValue().set(usedKey, studentEmail, Duration.ofSeconds(tokenTtlSeconds));
+
+            return true;
+        } finally {
+            // В любом случае освобождаем резерв
+            redisTemplate.delete(processingKey);
         }
-        Long sessionId = Long.valueOf(sessionIdObj.toString());
-
-        // проверка не отметился ли студент еще раз
-        String studentAttendanceKey = "attendance:session:" + sessionId + ":student:" + studentEmail;
-        Boolean alreadyMarked = redisTemplate.opsForValue()
-                .setIfAbsent(studentAttendanceKey, "true", Duration.ofMinutes(3));
-        if (!Boolean.TRUE.equals(alreadyMarked)) {
-            redisTemplate.delete(usedKey);
-            throw new AttendanceException("Вы уже отмечались");
-        }
-
-        // есть ли студент
-        Student student = studentRepository.findByEmail(studentEmail).orElse(null);
-        if (student == null) {
-            redisTemplate.delete(usedKey);
-            redisTemplate.delete(studentAttendanceKey);
-            throw new AttendanceException("Вас нет в списке студентов");
-        }
-
-        // есть ли лекция
-        LectureSession lectureSession = lectureSessionRepository.findById(sessionId).orElse(null);
-        if (lectureSession == null) {
-            redisTemplate.delete(usedKey);
-            throw new AttendanceException("Некорректное создание пары");
-        }
-
-        // из этих ли групп студент
-        boolean belongs = lectureSession.getStudentGroups().stream()
-                .anyMatch(g -> g.getId().equals(student.getGroup().getId()));
-        if (!belongs) {
-            redisTemplate.delete(usedKey);
-            throw new AttendanceException("Вы не из этой группы");
-        }
-
-        // запись посещения
-        AttendanceRecord attendanceRecord = new AttendanceRecord();
-        attendanceRecord.setStudent(student);
-        attendanceRecord.setLectureSession(lectureSession);
-        attendanceRecord.setPresent(true);
-        attendanceRecord.setTimestamp(LocalDate.now());
-        attendanceRecordRepository.save(attendanceRecord);
-
-        return true;
     }
 }

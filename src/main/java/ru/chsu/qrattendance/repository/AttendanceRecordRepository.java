@@ -9,4 +9,7 @@ import java.util.List;
 public interface AttendanceRecordRepository extends JpaRepository<AttendanceRecord, Long> {
     @Query("SELECT ar FROM AttendanceRecord ar JOIN FETCH ar.student WHERE ar.lectureSession.id = ?1")
     List<AttendanceRecord> findByLectureSessionId(Long sessionId);
+
+    @Query("select (count(a) > 0) from AttendanceRecord a where a.student.id = ?1 and a.lectureSession.id = ?2")
+    boolean existsByStudent_IdAndLectureSession_Id(Long studentId, Long sessionId);
 }
